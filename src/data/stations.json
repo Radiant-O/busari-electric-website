@@ -1,0 +1,153 @@
+{
+  "_readme": [
+    "Every Busari Electric station the map shows. Add one object per site.",
+    "status per connector group: 'available' count is how many are free right now.",
+    "For live availability, set liveStatusUrl to an endpoint (from your charger management software) that returns",
+    "{ \"<station id>\": { \"<connector type>\": <available count> } } and the map refreshes every 60 seconds.",
+    "Stations with \"sample\": true are PREVIEW DATA ONLY. They are shown with a 'sample' label, left out of search-engine data, and must be removed before launch."
+  ],
+  "liveStatusUrl": "",
+  "stations": [
+    {
+      "id": "sample-houston",
+      "sample": true,
+      "name": "Busari Electric Houston Midtown",
+      "street": "Sample location",
+      "city": "Houston", "state": "TX", "zip": "77002",
+      "lat": 29.7499, "lng": -95.3779,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Coffee", "Wi-Fi"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 4, "available": 3 },
+        { "type": "NACS", "level": "dc", "kw": 250, "count": 2, "available": 1 }
+      ]
+    },
+    {
+      "id": "sample-dallas",
+      "sample": true,
+      "name": "Busari Electric Dallas Uptown",
+      "street": "Sample location",
+      "city": "Dallas", "state": "TX", "zip": "75201",
+      "lat": 32.7942, "lng": -96.8022,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Shopping"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 150, "count": 4, "available": 0 },
+        { "type": "J1772", "level": "l2", "kw": 19, "count": 6, "available": 4 }
+      ]
+    },
+    {
+      "id": "sample-atlanta",
+      "sample": true,
+      "name": "Busari Electric Atlanta Westside",
+      "street": "Sample location",
+      "city": "Atlanta", "state": "GA", "zip": "30318",
+      "lat": 33.7866, "lng": -84.4120,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Food", "Wi-Fi"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 6, "available": 5 },
+        { "type": "NACS", "level": "dc", "kw": 250, "count": 2, "available": 2 }
+      ]
+    },
+    {
+      "id": "sample-charlotte",
+      "sample": true,
+      "name": "Busari Electric Charlotte South End",
+      "street": "Sample location",
+      "city": "Charlotte", "state": "NC", "zip": "28203",
+      "lat": 35.2125, "lng": -80.8590,
+      "hours": "6 am – midnight",
+      "amenities": ["Coffee", "Shopping"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 150, "count": 2, "available": 1 },
+        { "type": "J1772", "level": "l2", "kw": 11, "count": 4, "available": 2 }
+      ]
+    },
+    {
+      "id": "sample-chicago",
+      "sample": true,
+      "name": "Busari Electric Chicago West Loop",
+      "street": "Sample location",
+      "city": "Chicago", "state": "IL", "zip": "60607",
+      "lat": 41.8828, "lng": -87.6500,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Food"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 4, "available": 2 },
+        { "type": "NACS", "level": "dc", "kw": 250, "count": 2, "available": 0 },
+        { "type": "J1772", "level": "l2", "kw": 19, "count": 4, "available": 3 }
+      ]
+    },
+    {
+      "id": "sample-columbus",
+      "sample": true,
+      "name": "Busari Electric Columbus Short North",
+      "street": "Sample location",
+      "city": "Columbus", "state": "OH", "zip": "43215",
+      "lat": 39.9780, "lng": -83.0030,
+      "hours": "Open 24 hours",
+      "amenities": ["Coffee"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 150, "count": 2, "available": 0 },
+        { "type": "NACS", "level": "dc", "kw": 150, "count": 2, "available": 0 }
+      ]
+    },
+    {
+      "id": "sample-baltimore",
+      "sample": true,
+      "name": "Busari Electric Baltimore Harbor East",
+      "street": "Sample location",
+      "city": "Baltimore", "state": "MD", "zip": "21202",
+      "lat": 39.2830, "lng": -76.5990,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Food", "Shopping"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 4, "available": 4 }
+      ]
+    },
+    {
+      "id": "sample-newark",
+      "sample": true,
+      "name": "Busari Electric Newark Ironbound",
+      "street": "Sample location",
+      "city": "Newark", "state": "NJ", "zip": "07105",
+      "lat": 40.7260, "lng": -74.1600,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Coffee"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 150, "count": 4, "available": 1 },
+        { "type": "J1772", "level": "l2", "kw": 11, "count": 6, "available": 6 }
+      ]
+    },
+    {
+      "id": "sample-phoenix",
+      "sample": true,
+      "name": "Busari Electric Phoenix Camelback",
+      "street": "Sample location",
+      "city": "Phoenix", "state": "AZ", "zip": "85016",
+      "lat": 33.5090, "lng": -112.0300,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Food", "Wi-Fi"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 6, "available": 4 },
+        { "type": "NACS", "level": "dc", "kw": 250, "count": 4, "available": 3 }
+      ]
+    },
+    {
+      "id": "sample-los-angeles",
+      "sample": true,
+      "name": "Busari Electric Los Angeles Arts District",
+      "street": "Sample location",
+      "city": "Los Angeles", "state": "CA", "zip": "90013",
+      "lat": 34.0410, "lng": -118.2350,
+      "hours": "Open 24 hours",
+      "amenities": ["Restrooms", "Coffee", "Shopping"],
+      "connectors": [
+        { "type": "CCS1", "level": "dc", "kw": 350, "count": 8, "available": 6 },
+        { "type": "NACS", "level": "dc", "kw": 250, "count": 4, "available": 2 },
+        { "type": "J1772", "level": "l2", "kw": 19, "count": 4, "available": 1 }
+      ]
+    }
+  ]
+}

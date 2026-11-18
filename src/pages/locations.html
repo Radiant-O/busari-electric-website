@@ -1,0 +1,68 @@
+<!---
+{
+  "title": "Find an EV Charging Station Near You | Busari Electric Map",
+  "description": "Map of every Busari Electric EV charging station in the US. See live plug availability, filter by CCS1, NACS or J1772, and get directions to the nearest open charger.",
+  "path": "/locations/",
+  "nav": "locations",
+  "breadcrumb": "Find a charger",
+  "priority": 0.9,
+  "stationsSchema": true,
+  "bodyClass": "page-locations",
+  "styles": ["https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"],
+  "scripts": ["https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "/assets/js/locations.js"],
+  "head": "<link rel=\"preconnect\" href=\"https://tile.openstreetmap.org\" crossorigin>"
+}
+--->
+<h1 class="sr-only">Find a Busari Electric EV charging station near you</h1>
+<div class="locator" data-locator>
+  <section class="locator-panel" aria-label="Search and results">
+    <div class="locator-search">
+      <form class="locator-form" data-search-form role="search">
+        <label for="loc-q">Find chargers near</label>
+        <div class="finder-row">
+          <input class="input" id="loc-q" name="q" type="search" inputmode="search" placeholder="City, ZIP code or address" autocomplete="postal-code">
+          <button class="btn btn-primary" type="submit" aria-label="Search">{{icon:search}}</button>
+        </div>
+      </form>
+      <button class="btn btn-outline btn-block locate-btn" type="button" data-locate>{{icon:locate}}Use my location</button>
+
+      <fieldset class="filters" data-filters>
+        <legend class="sr-only">Filters</legend>
+        <label class="chip"><input type="checkbox" name="available" value="1"><span>Available now</span></label>
+        <label class="chip"><input type="checkbox" name="dc" value="1"><span>DC fast only</span></label>
+        <label class="chip"><input type="checkbox" name="plug" value="CCS1"><span>CCS1</span></label>
+        <label class="chip"><input type="checkbox" name="plug" value="NACS"><span>NACS</span></label>
+        <label class="chip"><input type="checkbox" name="plug" value="J1772"><span>J1772</span></label>
+      </fieldset>
+      <p class="locator-status" role="status" aria-live="polite" data-status></p>
+    </div>
+    <div class="locator-notice" data-sample-notice hidden>
+      Preview data: the stations below are sample locations for testing the map. Real Busari Electric stations will replace them before launch.
+    </div>
+    <ol class="results" data-results aria-label="Charging stations"></ol>
+  </section>
+  <div class="locator-map" aria-label="Map of charging stations">
+    <div id="map" data-map></div>
+    <noscript><p class="map-noscript">Turn on JavaScript to see the station map.</p></noscript>
+  </div>
+</div>
+
+<section class="section section-white" aria-labelledby="loc-help">
+  <div class="wrap" style="max-width: 920px;">
+    <h2 id="loc-help">Using the station map</h2>
+    <div class="faq-list">
+      <details class="faq">
+        <summary>What does "available" mean on the map?{{icon:chevron-down}}</summary>
+        <div class="faq-a"><p>Available means a plug is free and ready to charge right now. Counts update about every minute. A plug can be taken between the time you look and the time you arrive, so busy stations show how many plugs they have in total.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Which plug does my car need?{{icon:chevron-down}}</summary>
+        <div class="faq-a"><p>Most non-Tesla EVs sold in the US use CCS1 for fast charging. Tesla cars and a growing number of 2025 and newer EVs use NACS (J3400). For Level 2 charging, nearly every EV uses J1772, and Tesla cars use the J1772 adapter that came with the car.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Why can't the map find my location?{{icon:chevron-down}}</summary>
+        <div class="faq-a"><p>Your browser may have location access turned off for this site. Allow location in your browser settings, or type a city or ZIP code in the search box instead.</p></div>
+      </details>
+    </div>
+  </div>
+</section>

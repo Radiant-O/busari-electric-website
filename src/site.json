@@ -1,0 +1,33 @@
+{
+  "_note": "Business details used on every page. Replace any value marked TODO before launch.",
+  "name": "Busari Electric",
+  "legalName": "Busari Electric",
+  "url": "https://www.busarielectric.com",
+  "_url_todo": "TODO: confirm the real domain. It drives canonical URLs, the sitemap, and structured data.",
+  "tagline": "Fast, reliable EV charging across the United States.",
+  "email": "hello@busarielectric.com",
+  "phone": "",
+  "_phone_todo": "TODO: add the support phone number, e.g. \"+1-555-555-0100\". Leave empty to hide it.",
+  "address": {
+    "street": "",
+    "city": "",
+    "region": "",
+    "postalCode": "",
+    "country": "US"
+  },
+  "_address_todo": "TODO: add the head-office address. Leave empty to hide it.",
+  "social": [],
+  "formEndpoint": "",
+  "_formEndpoint_todo": "Optional: a form service URL (e.g. Formspree). When empty, forms open the visitor's email app with the message pre-filled.",
+  "pricing": {
+    "currency": "USD",
+    "dcFastPerKwh": 0.48,
+    "level2PerKwh": 0.32,
+    "plusMonthly": 6.99,
+    "plusDcFastPerKwh": 0.38,
+    "plusLevel2PerKwh": 0.26,
+    "idlePerMinute": 0.40,
+    "idleGraceMinutes": 10,
+    "_todo": "TODO: confirm all prices. Where a state requires per-minute billing, update the pricing page copy."
+  }
+}
