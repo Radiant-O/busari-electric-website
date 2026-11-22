@@ -1,4 +1,4 @@
-/* Busari Electric station finder.
+/* BusterElectric station finder.
  * Data: /assets/data/stations.json (generated from src/data/stations.json).
  * Map: Leaflet + OpenStreetMap tiles. Place search: OpenStreetMap Nominatim (US only).
  */
@@ -30,10 +30,8 @@
     form: root.querySelector('[data-search-form]'),
     input: root.querySelector('#loc-q'),
     locate: root.querySelector('[data-locate]'),
-    filters: root.querySelector('[data-filters]'),
     status: root.querySelector('[data-status]'),
-    results: root.querySelector('[data-results]'),
-    notice: root.querySelector('[data-sample-notice]')
+    results: root.querySelector('[data-results]')
   };
 
   var state = { stations: [], origin: null, originLabel: '', activeId: null, liveUrl: '' };
@@ -46,7 +44,7 @@
   L.tileLayer(TILE_URL, { maxZoom: 19, attribution: TILE_ATTR }).addTo(map);
 
   function pinIcon(st, active) {
-    var open = availableCount(st) > 0;
+    var open = !hasLive(st) || availableCount(st) > 0;
     return L.divIcon({
       className: '',
       html: '<div class="pin' + (open ? '' : ' is-busy') + (active ? ' is-active' : '') + '">' + ICON.bolt + '</div>',
@@ -56,9 +54,10 @@
 
   /* ---------- helpers ---------- */
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function hasLive(st) { return st.connectors.some(function (c) { return typeof c.available === 'number'; }); }
   function availableCount(st) { return st.connectors.reduce(function (n, c) { return n + (c.available || 0); }, 0); }
-  function totalCount(st) { return st.connectors.reduce(function (n, c) { return n + c.count; }, 0); }
-  function maxKw(st) { return Math.max.apply(null, st.connectors.map(function (c) { return c.kw; })); }
+  function totalCount(st) { return st.connectors.reduce(function (n, c) { return n + (c.count || 0); }, 0); }
+  function plugText(c) { return (c.level === 'dc' ? 'DC fast' : 'Level 2') + (c.kw ? ', up to ' + c.kw + ' kW' : ''); }
   function miles(a, b) {
     var R = 3958.8, toRad = Math.PI / 180;
     var dLat = (b[0] - a[0]) * toRad, dLng = (b[1] - a[1]) * toRad;
@@ -68,38 +67,19 @@
   function fmtMiles(m) { return m < 10 ? m.toFixed(1) + ' mi' : Math.round(m).toLocaleString('en-US') + ' mi'; }
   function directionsUrl(st) { return 'https://www.google.com/maps/dir/?api=1&destination=' + st.lat + ',' + st.lng; }
   function setStatus(msg, tone) { els.status.textContent = msg; if (tone) els.status.dataset.tone = tone; else delete els.status.dataset.tone; }
-  function address(st) { return (st.sample ? '' : st.street + ', ') + st.city + ', ' + st.state + ' ' + st.zip; }
+  function address(st) { return st.street + ', ' + st.city + ', ' + st.state + ' ' + st.zip; }
 
-  function readFilters() {
-    var f = { available: false, dc: false, plugs: [] };
-    els.filters.querySelectorAll('input').forEach(function (i) {
-      if (!i.checked) return;
-      if (i.name === 'plug') f.plugs.push(i.value); else f[i.name] = true;
-    });
-    return f;
-  }
-  function matches(st, f) {
-    var cons = st.connectors.filter(function (c) {
-      if (f.dc && c.level !== 'dc') return false;
-      if (f.plugs.length && f.plugs.indexOf(c.type) === -1) return false;
-      return true;
-    });
-    if (!cons.length) return false;
-    if (f.available && !cons.some(function (c) { return c.available > 0; })) return false;
-    return true;
-  }
 
   /* ---------- render ---------- */
   function render() {
-    var f = readFilters();
-    var list = state.stations.filter(function (st) { return matches(st, f); });
+    var list = state.stations.slice();
     list.forEach(function (st) { st._dist = state.origin ? miles(state.origin, [st.lat, st.lng]) : null; });
     if (state.origin) list.sort(function (a, b) { return a._dist - b._dist; });
     else list.sort(function (a, b) { return a.state.localeCompare(b.state) || a.city.localeCompare(b.city); });
 
     var nearestOpenId = null;
     if (state.origin) {
-      var open = list.filter(function (st) { return availableCount(st) > 0; })[0];
+      var open = list.filter(function (st) { return !hasLive(st) || availableCount(st) > 0; })[0];
       if (open) nearestOpenId = open.id;
     }
 
@@ -114,35 +94,34 @@
     });
 
     if (!list.length) {
-      els.results.innerHTML = '<li class="results-empty"><h2>No stations match these filters</h2><p>Turn off a filter to see more stations.</p></li>';
+      els.results.innerHTML = '<li class="results-empty"><h2>No stations to show</h2></li>';
     } else {
       els.results.innerHTML = list.map(function (st) { return card(st, st.id === nearestOpenId); }).join('');
     }
 
     var shown = list.length + (list.length === 1 ? ' station' : ' stations');
-    if (state.origin) setStatus(shown + ', nearest to ' + state.originLabel + ' first.');
-    else setStatus(shown + '. Share your location or search to sort by distance.');
+    if (state.origin) setStatus(list.length === 1 ? 'Distance shown from ' + state.originLabel + '.' : shown + ', nearest to ' + state.originLabel + ' first.');
+    else setStatus('Share your location or search to see how far away it is.');
     return list;
   }
 
   function card(st, nearestOpen) {
-    var avail = availableCount(st), total = totalCount(st);
+    var live = hasLive(st), avail = availableCount(st), total = totalCount(st);
     var plugs = st.connectors.map(function (c) {
-      return '<li class="plug"><b>' + esc(c.type) + '</b><span>' + (c.level === 'dc' ? 'DC fast' : 'Level 2') + ', up to ' + c.kw + ' kW</span>' +
-        '<em class="' + (c.available ? '' : 'none') + '">' + c.available + ' of ' + c.count + ' free</em></li>';
+      return '<li class="plug"><b>' + esc(c.type) + '</b><span>' + plugText(c) + '</span>' +
+        (typeof c.available === 'number' ? '<em class="' + (c.available ? '' : 'none') + '">' + c.available + ' of ' + c.count + ' free</em>' : '<em></em>') + '</li>';
     }).join('');
     return '<li class="station' + (st.id === state.activeId ? ' is-active' : '') + '" id="st-' + esc(st.id) + '" data-id="' + esc(st.id) + '">' +
       '<div class="station-top"><h2><button type="button" data-focus="' + esc(st.id) + '">' + esc(st.name) + '</button></h2>' +
       (st._dist != null ? '<span class="station-dist">' + fmtMiles(st._dist) + '</span>' : '') + '</div>' +
       '<p class="station-addr">' + esc(address(st)) + '</p>' +
       '<div class="station-flags">' +
-        (nearestOpen ? '<span class="badge nearest-flag">Nearest open charger</span>' : '') +
-        (avail ? '<span class="badge badge-go">' + avail + ' of ' + total + ' plugs free</span>' : '<span class="badge badge-busy">All ' + total + ' plugs in use</span>') +
-        (st.sample ? '<span class="badge badge-sample">Sample</span>' : '') +
+        (nearestOpen && state.stations.length > 1 ? '<span class="badge nearest-flag">Nearest station</span>' : '') +
+        (live ? (avail ? '<span class="badge badge-go">' + avail + ' of ' + total + ' plugs free</span>' : '<span class="badge badge-busy">All ' + total + ' plugs in use</span>') : '<span class="badge badge-go">' + esc(st.hours) + '</span>') +
+        (st.network ? '<span class="badge badge-sample">' + esc(st.network) + ' network</span>' : '') +
       '</div>' +
       '<ul class="plugs">' + plugs + '</ul>' +
-      '<div class="station-meta"><span>' + ICON.clock + esc(st.hours) + '</span>' +
-        (st.amenities && st.amenities.length ? '<span>' + ICON.store + esc(st.amenities.join(', ')) + '</span>' : '') + '</div>' +
+      (st.amenities && st.amenities.length ? '<div class="station-meta"><span>' + ICON.store + esc(st.amenities.join(', ')) + '</span></div>' : '') +
       '<div class="station-actions">' +
         '<a class="btn btn-primary" href="' + directionsUrl(st) + '" target="_blank" rel="noopener">' + ICON.nav + 'Directions</a>' +
         '<button class="btn btn-outline" type="button" data-focus="' + esc(st.id) + '">' + ICON.pin + 'Show on map</button>' +
@@ -150,10 +129,10 @@
   }
 
   function popup(st) {
-    var avail = availableCount(st);
+    var live = hasLive(st), avail = availableCount(st);
     return '<h3>' + esc(st.name) + '</h3><p>' + esc(address(st)) + '</p>' +
-      '<p><span class="badge ' + (avail ? 'badge-go' : 'badge-busy') + '">' + (avail ? avail + ' of ' + totalCount(st) + ' plugs free' : 'All plugs in use') + '</span></p>' +
-      '<p>Up to ' + maxKw(st) + ' kW: ' + esc(st.connectors.map(function (c) { return c.type; }).join(', ')) + '</p>' +
+      (live ? '<p><span class="badge ' + (avail ? 'badge-go' : 'badge-busy') + '">' + (avail ? avail + ' of ' + totalCount(st) + ' plugs free' : 'All plugs in use') + '</span></p>' : '') +
+      '<p>' + esc(st.hours) + '. ' + esc(st.connectors.map(function (c) { return c.type; }).join(', ')) + '</p>' +
       '<a class="btn btn-primary" href="' + directionsUrl(st) + '" target="_blank" rel="noopener">Directions</a>';
   }
 
@@ -248,7 +227,6 @@
   /* ---------- events ---------- */
   els.form.addEventListener('submit', function (e) { e.preventDefault(); geocode(els.input.value); });
   els.locate.addEventListener('click', locate);
-  els.filters.addEventListener('change', function () { render(); });
   els.results.addEventListener('click', function (e) {
     var b = e.target.closest('[data-focus]');
     if (b) focusStation(b.getAttribute('data-focus'), { scrollMap: true });
@@ -261,7 +239,6 @@
     .then(function (data) {
       state.stations = data.stations;
       state.liveUrl = data.liveStatusUrl || '';
-      if (state.stations.some(function (s) { return s.sample; })) els.notice.hidden = false;
 
       state.stations.forEach(function (st) {
         markers[st.id] = L.marker([st.lat, st.lng], { icon: pinIcon(st, false), title: st.name, alt: st.name, riseOnHover: true })
@@ -270,7 +247,8 @@
           .addTo(map);
       });
       var list = render();
-      if (list.length && !state.origin) map.fitBounds(L.latLngBounds(list.map(function (s) { return [s.lat, s.lng]; })), { padding: [32, 32] });
+      if (list.length === 1 && !state.origin) map.setView([list[0].lat, list[0].lng], 14);
+      else if (list.length && !state.origin) map.fitBounds(L.latLngBounds(list.map(function (s) { return [s.lat, s.lng]; })), { padding: [32, 32] });
 
       var params = new URLSearchParams(window.location.search);
       if (params.get('station')) focusStation(params.get('station'), { instant: true, scrollList: true });

@@ -1,6 +1,6 @@
-# Busari Electric website
+# BusterElectric website
 
-Marketing site and EV station finder for Busari Electric. It's a fast static site: plain HTML, CSS and JavaScript, with no framework and no database.
+Website and station map for BusterElectric (Buster Technologies LLC), an EV charging outlet in Arlington, TX, partnered with Electrify America. It's a fast static site: plain HTML, CSS and JavaScript, with no framework and no database.
 
 ## Run it locally
 
@@ -15,7 +15,7 @@ Requires Node 18 or newer. Always edit files in `src/`. `public/` is generated o
 
 | What | File |
 |---|---|
-| Business name, email, phone, address, domain, **prices** | `src/site.json` |
+| Business name, legal name, email, phone, address, domain, partner links | `src/site.json` |
 | **Charging stations** shown on the map | `src/data/stations.json` |
 | Pages | `src/pages/*.html` (the JSON block at the top of each sets its SEO title and description) |
 | Header, footer, `<head>` | `src/partials/layout.html` |
@@ -29,8 +29,8 @@ Add an object to `stations` in `src/data/stations.json`:
 
 ```json
 {
-  "id": "atlanta-peachtree",
-  "name": "Busari Electric Atlanta Peachtree",
+  "id": "dallas-main",
+  "name": "BusterElectric Dallas",
   "street": "123 Peachtree St NE",
   "city": "Atlanta", "state": "GA", "zip": "30303",
   "lat": 33.7590, "lng": -84.3880,
@@ -45,14 +45,14 @@ Add an object to `stations` in `src/data/stations.json`:
 
 - `type` is `CCS1`, `NACS` or `J1772`. `level` is `dc` (fast) or `l2` (Level 2).
 - Get `lat`/`lng` by right-clicking the spot in Google Maps.
-- **Delete every station marked `"sample": true` before launch.** When no sample stations remain, the "Preview data" notice disappears, and real stations are added to the structured data search engines read.
+- `kw` and `available` are optional. Without `available`, the map sends drivers to the Electrify America app for live status.
 
 ### Live availability
 
 Set `liveStatusUrl` in `stations.json` to an endpoint from your charger management software (CSMS) that returns:
 
 ```json
-{ "atlanta-peachtree": { "CCS1": 3, "NACS": 1 } }
+{ "dallas-main": { "CCS1": 3, "NACS": 1 } }
 ```
 
 The map fetches it every 60 seconds and updates the free-plug counts. Until it's set, the map shows the `available` numbers from the file.
@@ -66,7 +66,7 @@ The business and contact forms work without a backend: they open the visitor's e
 Built in on every build:
 
 - A unique title, meta description, canonical URL, and Open Graph/Twitter card on every page
-- JSON-LD structured data: Organization, WebSite (with a site search action), BreadcrumbList, FAQPage (generated from the visible FAQ text, so the two always match), and station listings for real stations
+- JSON-LD structured data: Organization (with the station address), WebSite, BreadcrumbList, and the station listing on the map page. A page can add FAQPage data by setting `"faqFromPage": true` and using `<details class="faq">` blocks.
 - `sitemap.xml`, `robots.txt` (also allows AI crawlers such as GPTBot, ClaudeBot and PerplexityBot), and `llms.txt` (a plain-text summary for AI assistants)
 - Question-and-answer page structure, one H1 per page, descriptive image alt text, responsive WebP images, and fonts that don't block rendering
 

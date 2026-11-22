@@ -1,11 +1,10 @@
 <!---
 {
-  "title": "Busari Electric | Fast EV Charging Stations Near You in the USA",
-  "description": "Find a Busari Electric EV charging station near you. DC fast charging up to 350 kW with CCS1 and NACS plugs, live availability, and tap-to-pay at every charger.",
+  "title": "BusterElectric | 24/7 EV Fast Charging in Arlington, TX",
+  "description": "Fast EV charging at 2404 South Collins Street, Arlington, Texas. Open 24 hours, works with every electric car. Pay with the Electrify America app or your card.",
   "path": "/",
   "nav": "home",
   "priority": 1.0,
-  "faqFromPage": true,
   "head": "<link rel=\"preload\" as=\"image\" href=\"/assets/img/hero-driver-plugging-in-1600.webp\" imagesrcset=\"/assets/img/hero-driver-plugging-in-800.webp 800w, /assets/img/hero-driver-plugging-in-1600.webp 1600w\" imagesizes=\"(min-width: 1024px) 62vw, 100vw\" fetchpriority=\"high\">"
 }
 --->
@@ -19,21 +18,18 @@
   </div>
   <div class="wrap hero-inner">
     <div class="sign">
-      <h1 id="hero-title">Fast EV charging, right off your route.</h1>
-      <p class="hero-sub">Find an open Busari Electric charger near you. Plug in, pay with a card or your phone, and get back on the road.</p>
-      <form class="finder" action="/locations/" method="get" role="search">
-        <label for="hero-q">City, ZIP code or address</label>
-        <div class="finder-row">
-          <input class="finder-input" id="hero-q" name="q" type="search" inputmode="search" autocomplete="postal-code" placeholder="e.g. 30318 or Houston, TX" required>
-          <button class="btn btn-volt" type="submit">{{icon:search}}<span>Search</span></button>
-        </div>
-        <a class="finder-locate" href="/locations/?near=me">{{icon:locate}}Use my location</a>
-      </form>
+      <h1 id="hero-title">Fast EV charging in Arlington, Texas</h1>
+      <p class="hero-sub">Open 24 hours on South Collins Street. Works with every electric car.</p>
+      <p class="hero-address">{{icon:map-pin}}<span>{{site.street}}, {{site.cityLine}}</span></p>
+      <div class="cta-actions">
+        <a class="btn btn-volt" href="{{site.directions}}" target="_blank" rel="noopener">{{icon:navigation}}Get directions</a>
+        <a class="btn btn-ghost-light" href="/locations/">See it on the map</a>
+      </div>
     </div>
     <div class="hero-proof">
-      <div><strong>{{stations.maxKw}} kW</strong><span>Top DC fast charging speed</span></div>
-      <div><strong>CCS1 + NACS</strong><span>Plugs for nearly every EV</span></div>
-      <div><strong>Tap to pay</strong><span>Card, Apple Pay or Google Pay</span></div>
+      <div><strong>24/7</strong><span>Open every day, all day</span></div>
+      <div><strong>All EVs</strong><span>CCS1 and NACS (Tesla) plugs</span></div>
+      <div><strong>App or card</strong><span>Pay the way you like</span></div>
     </div>
   </div>
 </section>
@@ -47,154 +43,40 @@
            alt="A driver connects the charger to her car at a city charging station">
     </div>
     <div>
-      <h2 id="how-title">How charging works</h2>
-      <p class="lede">No app or membership needed. Here is a full charging session, start to finish.</p>
+      <h2 id="how-title">How to charge</h2>
       <ol class="steps">
-        <li><div><h3>Find an open charger</h3><p>Our map shows which plugs are free right now and how far they are from you.</p></div></li>
-        <li><div><h3>Plug in</h3><p>Fast chargers have CCS1 and NACS cables. Level 2 chargers use J1772.</p></div></li>
-        <li><div><h3>Tap to pay</h3><p>Tap a credit or debit card, Apple Pay or Google Pay on the reader. Charging starts in seconds.</p></div></li>
-        <li><div><h3>Unplug and go</h3><p>Get your receipt by text or email. Move your car within {{price.idleGraceMinutes}} minutes of finishing to avoid idle fees.</p></div></li>
+        <li><div><h3>Park and plug in</h3><p>Use the cable that fits your car: CCS1 or NACS.</p></div></li>
+        <li><div><h3>Start and pay</h3><p>Start in the {{partner.name}} app, or tap your credit or debit card on the charger.</p></div></li>
+        <li><div><h3>Charge and go</h3><p>Unplug and move your car when you're done, so the next driver can charge.</p></div></li>
       </ol>
+      <p class="after-steps"><a class="text-link" href="/pricing/">See pricing and payment</a></p>
     </div>
   </div>
 </section>
 
-<section class="section" aria-labelledby="speed-title">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 id="speed-title">Two ways to charge</h2>
-      <p>Use DC fast charging when you are on the move. Use Level 2 when your car will be parked for a few hours.</p>
-    </div>
-    <div class="speeds">
-      <article class="speed speed-dc">
-        <h3>DC fast charging</h3>
-        <p class="speed-kw">{{stations.maxKw}}<small>kW max</small></p>
-        <p class="speed-caption">For road trips and quick top-ups</p>
-        <dl class="spec">
-          <dt>10–80% charge</dt><dd>About 20–40 minutes for most cars</dd>
-          <dt>Plugs</dt><dd>CCS1 and NACS (J3400)</dd>
-          <dt>Price</dt><dd>{{price.dcFastPerKwh}} per kWh</dd>
-        </dl>
-      </article>
-      <article class="speed">
-        <h3>Level 2 charging</h3>
-        <p class="speed-kw">19<small>kW max</small></p>
-        <p class="speed-caption">For work, shopping and overnight stays</p>
-        <dl class="spec">
-          <dt>Range added</dt><dd>About 20–60 miles per hour</dd>
-          <dt>Plugs</dt><dd>J1772 (NACS cars use their adapter)</dd>
-          <dt>Price</dt><dd>{{price.level2PerKwh}} per kWh</dd>
-        </dl>
-      </article>
-    </div>
-    <p class="price-note">Charging time depends on your car's maximum charging speed, battery temperature and starting charge. Your car sets the pace, and our chargers deliver as much power as it can take.</p>
-  </div>
-</section>
-
-<section class="section band-dark map-band" aria-labelledby="map-title">
-  <div class="wrap map-band-inner">
-    <div>
-      <h2 id="map-title">Know a charger is open before you drive there</h2>
-      <p class="lede">The Busari Electric map shows each station's live availability, plugs and amenities, sorted by distance from you.</p>
-      <ul class="features" style="margin: 32px 0 36px;">
-        <li class="feature"><span class="feature-icon">{{icon:battery-charging}}</span><div><h3>Live availability</h3><p>See how many plugs are free at each station right now.</p></div></li>
-        <li class="feature"><span class="feature-icon">{{icon:navigation}}</span><div><h3>Nearest first</h3><p>Share your location or enter a ZIP code to sort by distance.</p></div></li>
-        <li class="feature"><span class="feature-icon">{{icon:plug}}</span><div><h3>Filter by plug</h3><p>Show only CCS1, NACS or J1772 chargers that fit your car.</p></div></li>
-        <li class="feature"><span class="feature-icon">{{icon:map-pin}}</span><div><h3>One-tap directions</h3><p>Open turn-by-turn directions in Google Maps or Apple Maps.</p></div></li>
-      </ul>
-      <div class="cta-actions">
-        <a class="btn btn-volt" href="/locations/?near=me">{{icon:locate}}Find chargers near me</a>
-        <a class="btn btn-ghost-light" href="/locations/">Browse the map</a>
+<section class="section" aria-label="More from BusterElectric">
+  <div class="wrap offers">
+    <article class="offer">
+      <img src="/assets/img/home-charging-800.webp"
+           srcset="/assets/img/home-charging-800.webp 800w, /assets/img/home-charging-1600.webp 1600w"
+           sizes="(min-width: 800px) 50vw, 100vw" width="800" height="533" loading="lazy"
+           alt="An electric car charging from a wall charger at home">
+      <div class="offer-body">
+        <h2>Need a charger at home?</h2>
+        <p>We arrange Level 1 and Level 2 charger installation for your house.</p>
+        <a class="btn btn-primary" href="/home-charging/">Request home charging</a>
       </div>
-    </div>
-    <div class="mini-map">
-      <img src="/assets/img/parking-lot-charger-1600.webp"
-           srcset="/assets/img/parking-lot-charger-800.webp 800w, /assets/img/parking-lot-charger-1600.webp 1600w"
-           sizes="(min-width: 900px) 45vw, 100vw" width="1600" height="1200" loading="lazy"
-           alt="An electric SUV charging at a parking-lot charging station">
-      <div class="sign" aria-hidden="true"><p>{{icon:zap}} EV charging<small>Open plugs shown live on the map</small></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-white" aria-labelledby="why-title">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 id="why-title">Built for drivers who need to get going</h2>
-    </div>
-    <ul class="features features-3">
-      <li class="feature"><span class="feature-icon">{{icon:shield-check}}</span><div><h3>Chargers you can count on</h3><p>We monitor every charger remotely and send a technician when one needs repair.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:credit-card}}</span><div><h3>Prices shown upfront</h3><p>See the price per kWh on the charger screen before you start. No surprise fees.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:store}}</span><div><h3>Somewhere to wait</h3><p>Stations are placed near restrooms, food and coffee so your stop is useful.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:clock}}</span><div><h3>Open when you drive</h3><p>Most stations are open 24 hours. Each station's hours are listed on the map.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:smartphone}}</span><div><h3>Receipts on your phone</h3><p>Get your receipt by text or email, with energy used and total cost.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:leaf}}</span><div><h3>Cleaner miles</h3><p>Every session replaces gasoline miles with electric ones.</p></div></li>
-    </ul>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="biz-title">
-  <div class="wrap split split-reverse">
-    <div class="split-media">
-      <img src="/assets/img/workplace-charging-1600.webp"
+    </article>
+    <article class="offer">
+      <img src="/assets/img/workplace-charging-800.webp"
            srcset="/assets/img/workplace-charging-800.webp 800w, /assets/img/workplace-charging-1600.webp 1600w"
-           sizes="(min-width: 900px) 50vw, 100vw" width="1600" height="1067" loading="lazy"
-           alt="A man plugs his electric car into a wall-mounted charger in a workplace parking garage">
-    </div>
-    <div>
-      <h2 id="biz-title">Charging for your business</h2>
-      <p class="lede">We install, run and maintain chargers on your property, so drivers come to you and your fleet is always ready.</p>
-      <ul class="features" style="grid-template-columns: 1fr; margin: 28px 0 32px; gap: 24px;">
-        <li class="feature"><span class="feature-icon">{{icon:building-2}}</span><div><h3>Host a station</h3><p>Retail centers, hotels and property owners: bring EV drivers to your door.</p></div></li>
-        <li class="feature"><span class="feature-icon">{{icon:truck}}</span><div><h3>Fleet charging</h3><p>Depot charging for delivery vans, service trucks and company cars.</p></div></li>
-      </ul>
-      <a class="btn btn-primary" href="/business/">See business charging</a>
-    </div>
-  </div>
-</section>
-
-<section class="section section-white" aria-labelledby="faq-title">
-  <div class="wrap" style="max-width: 920px;">
-    <div class="section-head">
-      <h2 id="faq-title">Common questions</h2>
-    </div>
-    <div class="faq-list">
-      <details class="faq">
-        <summary>Will a Busari Electric charger work with my car?{{icon:chevron-down}}</summary>
-        <div class="faq-a"><p>Almost certainly. Our DC fast chargers have both CCS1 and NACS (J3400) cables, which together fit nearly every electric car sold in the US, including Tesla, Ford, GM, Hyundai, Kia, Rivian and BMW. Our Level 2 chargers use J1772; Tesla drivers can use the adapter that came with their car.</p></div>
-      </details>
-      <details class="faq">
-        <summary>How much does it cost to charge?{{icon:chevron-down}}</summary>
-        <div class="faq-a"><p>Pay as you go costs {{price.dcFastPerKwh}} per kWh for DC fast charging and {{price.level2PerKwh}} per kWh for Level 2. Busari Plus members pay {{price.plusDcFastPerKwh}} per kWh for DC fast and {{price.plusLevel2PerKwh}} per kWh for Level 2, for {{price.plusMonthly}} a month. See <a href="/pricing/">pricing</a> for details.</p></div>
-      </details>
-      <details class="faq">
-        <summary>Do I need an app or account to charge?{{icon:chevron-down}}</summary>
-        <div class="faq-a"><p>No. Tap a credit or debit card, Apple Pay or Google Pay on the charger's reader to start. An account is only needed for Busari Plus member pricing.</p></div>
-      </details>
-      <details class="faq">
-        <summary>How long does DC fast charging take?{{icon:chevron-down}}</summary>
-        <div class="faq-a"><p>Most electric cars charge from 10% to 80% in about 20 to 40 minutes on a DC fast charger. The exact time depends on your car's maximum charging speed, battery temperature and how full the battery is when you start.</p></div>
-      </details>
-      <details class="faq">
-        <summary>How do I find the nearest available charger?{{icon:chevron-down}}</summary>
-        <div class="faq-a"><p>Open the <a href="/locations/">Busari Electric map</a> and choose "Use my location", or type a city or ZIP code. Stations are sorted by distance and show how many plugs are free right now.</p></div>
-      </details>
-    </div>
-    <p style="margin-top: 28px;"><a class="text-link" href="/faq/">See all questions</a></p>
-  </div>
-</section>
-
-<section class="section cta-band" aria-labelledby="cta-title">
-  <div class="wrap">
-    <div class="sign">
-      <div>
-        <h2 id="cta-title">Find your nearest charger</h2>
-        <p>See open plugs near you and get directions in one tap.</p>
+           sizes="(min-width: 800px) 50vw, 100vw" width="800" height="533" loading="lazy"
+           alt="A man plugs his electric car into a charger in a parking garage">
+      <div class="offer-body">
+        <h2>Charging for your fleet</h2>
+        <p>Companies can set up charging for their vehicles at our station.</p>
+        <a class="btn btn-primary" href="/business/">Fleet and business</a>
       </div>
-      <div class="cta-actions">
-        <a class="btn btn-volt" href="/locations/?near=me">{{icon:locate}}Use my location</a>
-        <a class="btn btn-ghost-light" href="/pricing/">See pricing</a>
-      </div>
-    </div>
+    </article>
   </div>
 </section>

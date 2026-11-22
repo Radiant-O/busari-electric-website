@@ -1,7 +1,7 @@
 <!---
 {
-  "title": "EV Charging Prices per kWh | Busari Electric Pricing",
-  "description": "Busari Electric charging prices: DC fast charging {{price.dcFastPerKwh}} per kWh with pay as you go, lower rates with Busari Plus. No app needed. See idle fees and how billing works.",
+  "title": "EV Charging Pricing and Payment | BusterElectric Arlington",
+  "description": "Charging prices at BusterElectric in Arlington, TX are set by Electrify America. See the price in the Electrify America app or on the charger, and pay with the app or a card.",
   "path": "/pricing/",
   "nav": "pricing",
   "breadcrumb": "Pricing",
@@ -11,85 +11,40 @@
 <section class="page-intro">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">Pricing</span></nav>
-    <h1>Simple prices, shown before you charge</h1>
-    <p class="lede">You pay for the energy your car takes, per kilowatt-hour (kWh). The price is on the charger screen before you start.</p>
+    <h1>Pricing and payment</h1>
+    <p class="lede">Charging at our station uses {{partner.name}} pricing. We don't add any fees of our own.</p>
   </div>
 </section>
 
-<section class="section" aria-label="Plans">
+<section class="section" aria-labelledby="price-title">
   <div class="wrap">
+    <div class="section-head">
+      <h2 id="price-title">Where to see the price</h2>
+      <p>The price depends on your plan and how much energy your car takes. You can check it before you start: open the {{partner.name}} app and select our station on the map, or read it on the charger screen.</p>
+    </div>
+
     <div class="plans">
       <article class="plan">
         <span class="plan-tag">No sign-up</span>
-        <h2 style="font-size: var(--step-3);">Pay as you go</h2>
-        <p class="plan-desc">Tap a card or phone and charge. Best if you charge with us now and then.</p>
-        <div class="plan-rates">
-          <div class="rate"><strong>{{price.dcFastPerKwh}}<small>/kWh</small></strong><span>DC fast</span></div>
-          <div class="rate"><strong>{{price.level2PerKwh}}<small>/kWh</small></strong><span>Level 2</span></div>
-        </div>
+        <h3>Pay with a card</h3>
+        <p class="plan-desc">Tap or insert a credit or debit card on the charger. Apple Pay and Google Wallet also work.</p>
         <ul class="checks">
-          <li>{{icon:check}}<span>No app, account or monthly fee</span></li>
-          <li>{{icon:check}}<span>Credit or debit card, Apple Pay or Google Pay</span></li>
-          <li>{{icon:check}}<span>Receipt by text or email</span></li>
+          <li>{{icon:check}}<span>No app or account needed</span></li>
+          <li>{{icon:check}}<span>Price shown on the charger screen</span></li>
         </ul>
-        <a class="btn btn-outline" href="/locations/">Find a charger</a>
       </article>
       <article class="plan plan-plus">
-        <span class="plan-tag">{{price.plusMonthly}} a month</span>
-        <h2 style="font-size: var(--step-3);">Busari Plus</h2>
-        <p class="plan-desc">Lower prices on every session. Best if you fast-charge more than about 60 kWh a month.</p>
-        <div class="plan-rates">
-          <div class="rate"><strong>{{price.plusDcFastPerKwh}}<small>/kWh</small></strong><span>DC fast</span></div>
-          <div class="rate"><strong>{{price.plusLevel2PerKwh}}<small>/kWh</small></strong><span>Level 2</span></div>
-        </div>
+        <span class="plan-tag">Members</span>
+        <h3>Pay with the {{partner.name}} app</h3>
+        <p class="plan-desc">Add a card in the app once, then start and pay for charging from your phone.</p>
         <ul class="checks">
-          <li>{{icon:check}}<span>Member price on every session</span></li>
-          <li>{{icon:check}}<span>Monthly statement for expense reports</span></li>
-          <li>{{icon:check}}<span>Cancel any time, no contract</span></li>
+          <li>{{icon:check}}<span>Pass: free plan for app members</span></li>
+          <li>{{icon:check}}<span>Pass+: monthly plan with lower charging prices</span></li>
         </ul>
-        <a class="btn btn-primary" href="/contact/?topic=plus">Join Busari Plus</a>
+        <a class="btn btn-primary" href="{{partner.appUrl}}" target="_blank" rel="noopener">Get the app</a>
       </article>
     </div>
-    <p class="price-note">Prices are in US dollars and include all fees except applicable taxes. Prices at a specific station can differ; the charger screen and the station map always show the current price before you start.</p>
-  </div>
-</section>
 
-<section class="section section-white" aria-labelledby="fees-title">
-  <div class="wrap" style="max-width: 980px;">
-    <h2 id="fees-title">All charges at a glance</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th scope="col">Charge</th><th scope="col">Pay as you go</th><th scope="col">Busari Plus</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">DC fast charging</th><td>{{price.dcFastPerKwh}} per kWh</td><td>{{price.plusDcFastPerKwh}} per kWh</td></tr>
-          <tr><th scope="row">Level 2 charging</th><td>{{price.level2PerKwh}} per kWh</td><td>{{price.plusLevel2PerKwh}} per kWh</td></tr>
-          <tr><th scope="row">Monthly fee</th><td>None</td><td>{{price.plusMonthly}}</td></tr>
-          <tr><th scope="row">Idle fee</th><td>{{price.idlePerMinute}} per minute</td><td>{{price.idlePerMinute}} per minute</td></tr>
-          <tr><th scope="row">Session or connection fee</th><td>None</td><td>None</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2 style="margin-top: 72px;">How billing works</h2>
-    <ul class="features" style="margin-top: 24px;">
-      <li class="feature"><span class="feature-icon">{{icon:gauge}}</span><div><h3>You pay for energy, not time</h3><p>A kWh is a unit of energy. A typical EV goes 3 to 4 miles on one kWh, so a 40 kWh fast charge adds roughly 120 to 160 miles.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:credit-card}}</span><div><h3>A temporary hold, then the real total</h3><p>When you tap your card, your bank may show a temporary hold. It is replaced by the actual session total, usually within a few days.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:clock}}</span><div><h3>Idle fees keep chargers free</h3><p>If your car stays plugged in more than {{price.idleGraceMinutes}} minutes after charging stops, an idle fee of {{price.idlePerMinute}} a minute applies. You get a text before it starts.</p></div></li>
-      <li class="feature"><span class="feature-icon">{{icon:smartphone}}</span><div><h3>Receipts for every session</h3><p>Each receipt shows energy delivered, price per kWh, time and total, ready for expense reports.</p></div></li>
-    </ul>
-  </div>
-</section>
-
-<section class="section cta-band" aria-labelledby="cta-title">
-  <div class="wrap">
-    <div class="sign">
-      <div>
-        <h2 id="cta-title">Charging a company fleet?</h2>
-        <p>Get one monthly invoice and custom pricing for your drivers.</p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn-volt" href="/business/#fleet">See fleet charging</a>
-      </div>
-    </div>
+    <p class="price-note">Idle fees may apply if your car stays plugged in after charging ends. For full and current prices, see <a href="{{partner.pricingUrl}}" target="_blank" rel="noopener">{{partner.name}} pricing</a>.</p>
   </div>
 </section>

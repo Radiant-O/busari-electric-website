@@ -7,7 +7,7 @@
 <meta name="description" content="{{page.description}}">
 <meta name="robots" content="{{page.robots}}">
 <link rel="canonical" href="{{page.canonical}}">
-<meta name="theme-color" content="#0A4FA3">
+<meta name="theme-color" content="#111813">
 <meta name="format-detection" content="telephone=no">
 <meta name="geo.region" content="US">
 
@@ -44,19 +44,19 @@
 <header class="site-header" data-header>
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="{{site.name}} home">
-      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0A4FA3"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#fff" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#FFC531"/></svg>
-      <span class="brand-word">Busari<span>Electric</span></span>
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#111813"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#39FF14" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#39FF14"/></svg>
+      <span class="brand-word">Buster<span>Electric</span></span>
     </a>
     <nav class="primary-nav" id="primary-nav" aria-label="Main">
       <ul>
-        <li><a href="/locations/"{{nav.locations}}>Find a charger</a></li>
+        <li><a href="/locations/"{{nav.locations}}>Find the station</a></li>
         <li><a href="/pricing/"{{nav.pricing}}>Pricing</a></li>
+        <li><a href="/home-charging/"{{nav.homeCharging}}>Home charging</a></li>
         <li><a href="/business/"{{nav.business}}>For business</a></li>
-        <li><a href="/faq/"{{nav.faq}}>FAQ</a></li>
         <li><a href="/about/"{{nav.about}}>About</a></li>
         <li class="nav-contact"><a href="/contact/"{{nav.contact}}>Contact</a></li>
       </ul>
-      <a class="btn btn-primary nav-cta" href="/locations/">{{icon:map-pin}}Find a charger</a>
+      <a class="btn btn-volt nav-cta" href="{{site.directions}}" target="_blank" rel="noopener">{{icon:navigation}}Get directions</a>
     </nav>
     <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>
       <span class="nav-toggle-open">{{icon:menu}}</span><span class="nav-toggle-close">{{icon:x}}</span>
@@ -74,31 +74,30 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a class="brand brand-light" href="/" aria-label="{{site.name}} home">
-          <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0A4FA3"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#fff" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#FFC531"/></svg>
-          <span class="brand-word">Busari<span>Electric</span></span>
+          <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#111813"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#39FF14" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#39FF14"/></svg>
+          <span class="brand-word">Buster<span>Electric</span></span>
         </a>
         <p>{{site.tagline}}</p>
         <ul class="footer-contact">
-          <li><a href="mailto:{{site.email}}">{{icon:mail}}{{site.email}}</a></li>
-          {{#site.phone}}<li><a href="tel:{{site.phoneHref}}">{{icon:phone}}{{site.phone}}</a></li>{{/site.phone}}
-          {{#site.address}}<li>{{icon:map-pin}}<span>{{site.address}}</span></li>{{/site.address}}
+          {{#site.address}}<li><a href="{{site.directions}}" target="_blank" rel="noopener">{{icon:map-pin}}<span>{{site.address}}</span></a></li>{{/site.address}}
+          {{#site.phone}}<li><a href="tel:{{site.phoneHref}}">{{icon:phone}}<span>{{site.phone}}<small>{{site.phoneLabel}}</small></span></a></li>{{/site.phone}}
+          <li><a href="mailto:{{site.email}}">{{icon:mail}}<span>{{site.email}}</span></a></li>
         </ul>
       </div>
       <nav class="footer-nav" aria-label="Footer">
         <div>
           <h2>Charging</h2>
           <ul>
-            <li><a href="/locations/">Find a charger</a></li>
-            <li><a href="/pricing/">Pricing</a></li>
-            <li><a href="/faq/">Charging FAQ</a></li>
+            <li><a href="/locations/">Find the station</a></li>
+            <li><a href="/pricing/">Pricing and payment</a></li>
+            <li><a href="{{partner.appUrl}}" rel="noopener" target="_blank">Get the {{partner.name}} app</a></li>
           </ul>
         </div>
         <div>
-          <h2>Business</h2>
+          <h2>Services</h2>
           <ul>
-            <li><a href="/business/#host">Host a station</a></li>
-            <li><a href="/business/#fleet">Fleet charging</a></li>
-            <li><a href="/business/#workplace">Workplace charging</a></li>
+            <li><a href="/home-charging/">Home charging</a></li>
+            <li><a href="/business/">Fleet and business</a></li>
           </ul>
         </div>
         <div>
@@ -110,9 +109,12 @@
         </div>
       </nav>
     </div>
+    <div class="footer-partner">
+      <p>Charging at our station is provided in partnership with <a href="{{partner.url}}" rel="noopener" target="_blank">{{partner.name}}</a>. {{partner.name}} is a trademark of its owner.</p>
+    </div>
     <div class="footer-bottom">
-      <p>&copy; {{year}} {{site.name}}. All rights reserved.</p>
-      <p>Photography from <a href="https://www.pexels.com" rel="noopener">Pexels</a> contributors. Map data &copy; OpenStreetMap contributors.</p>
+      <p>&copy; {{year}} {{site.legalName}}. {{site.name}} is a brand of {{site.legalName}}.</p>
+      <p>Photos from <a href="https://www.pexels.com" rel="noopener">Pexels</a>. Map data &copy; OpenStreetMap contributors.</p>
     </div>
   </div>
 </footer>

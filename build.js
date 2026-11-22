@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Busari Electric static site build.
+ * BusterElectric static site build.
  * Reads src/, writes a ready-to-host site to public/.
  *   node build.js
  * No dependencies: plain Node 18+.
@@ -26,7 +26,6 @@ const today = new Date().toISOString().slice(0, 10);
 
 /* ---------- helpers ---------- */
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const money = (n) => '$' + Number(n).toFixed(2);
 const rmrf = (p) => fs.rmSync(p, { recursive: true, force: true });
 const mkdirp = (p) => fs.mkdirSync(p, { recursive: true });
 function copyDir(from, to) {
@@ -55,15 +54,22 @@ const vars = {
   'site.formEndpoint': site.formEndpoint || '',
   year: String(new Date().getFullYear()),
 };
-for (const [k, v] of Object.entries(site.pricing)) {
-  if (typeof v === 'number') vars['price.' + k] = k.includes('Minutes') ? String(v) : money(v);
-}
-vars['price.example40'] = money(site.pricing.dcFastPerKwh * 40);
+const partner = site.partner || {};
+Object.assign(vars, {
+  'site.legalName': site.legalName,
+  'site.phoneLabel': site.phoneLabel || 'Phone',
+  'site.street': addr.street || '',
+  'site.cityLine': hasAddress ? `${addr.city}, ${addr.region} ${addr.postalCode}` : '',
+  'site.directions': hasAddress ? 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(`${addr.street}, ${addr.city}, ${addr.region} ${addr.postalCode}`) : '',
+  'partner.name': partner.name || '',
+  'partner.url': partner.url || '',
+  'partner.pricingUrl': partner.pricingUrl || '',
+  'partner.appUrl': partner.appUrl || '',
+});
 const realStations = stationData.stations.filter((s) => !s.sample);
 const allStations = stationData.stations;
 vars['stations.count'] = String(allStations.length);
 vars['stations.states'] = String(new Set(allStations.map((s) => s.state)).size);
-vars['stations.maxKw'] = String(Math.max(...allStations.flatMap((s) => s.connectors.map((c) => c.kw))));
 
 function render(tpl, ctx) {
   let s = tpl;
@@ -90,10 +96,10 @@ const organization = {
   legalName: site.legalName,
   url: SITE_URL + '/',
   logo: SITE_URL + '/assets/img/logo-512.png',
-  description: 'Busari Electric builds and operates public EV fast-charging stations in the United States, and installs charging for businesses and fleets.',
-  areaServed: { '@type': 'Country', name: 'United States' },
+  description: `${site.name} is an EV charging outlet in Arlington, Texas, operating in partnership with station owners, currently ${partner.name}. It also arranges Level 1 and Level 2 home charger installation.`,
+  areaServed: { '@type': 'State', name: 'Texas' },
   email: site.email,
-  ...(site.phone ? { telephone: site.phone, contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'customer support', areaServed: 'US', availableLanguage: ['English'] }] } : {}),
+  ...(site.phone ? { telephone: site.phone, contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'customer support', hoursAvailable: 'Mo-Su 00:00-23:59', areaServed: 'US', availableLanguage: ['English'] }] } : {}),
   ...(hasAddress ? { address: { '@type': 'PostalAddress', streetAddress: addr.street, addressLocality: addr.city, addressRegion: addr.region, postalCode: addr.postalCode, addressCountry: addr.country || 'US' } } : {}),
   ...(site.social && site.social.length ? { sameAs: site.social } : {}),
 };
@@ -124,7 +130,7 @@ function stationSchema(s) {
     address: { '@type': 'PostalAddress', streetAddress: s.street, addressLocality: s.city, addressRegion: s.state, postalCode: s.zip, addressCountry: 'US' },
     geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
     openingHours: /24/.test(s.hours) ? 'Mo-Su 00:00-23:59' : undefined,
-    description: `EV charging: ${s.connectors.map((c) => `${c.count} × ${c.type} up to ${c.kw} kW`).join(', ')}.`,
+    description: `EV charging station${s.network ? ' on the ' + s.network + ' network' : ''}: ${s.connectors.map((c) => `${c.type} ${c.level === 'dc' ? 'DC fast' : 'Level 2'}`).join(', ')}.`,
     amenityFeature: [
       ...(dc.length ? [{ '@type': 'LocationFeatureSpecification', name: 'DC fast charging', value: true }] : []),
       ...s.amenities.map((a) => ({ '@type': 'LocationFeatureSpecification', name: a, value: true })),
@@ -165,7 +171,7 @@ for (const f of pageFiles) {
     'page.styles': (meta.styles || []).map((s) => `<link rel="stylesheet" href="${s}"${s.startsWith('http') ? ' crossorigin="anonymous"' : ''}>`).join('\n'),
     'page.bodyClass': meta.bodyClass || '',
   };
-  for (const n of ['home', 'locations', 'pricing', 'business', 'faq', 'about', 'contact']) ctx['nav.' + n] = meta.nav === n ? ' aria-current="page"' : '';
+  for (const n of ['home', 'locations', 'pricing', 'business', 'homeCharging', 'about', 'contact']) ctx['nav.' + n] = meta.nav === n ? ' aria-current="page"' : '';
 
   // structured data
   const schemas = [organization, website];
@@ -236,40 +242,41 @@ fs.writeFileSync(
   path.join(OUT, 'robots.txt'),
   PREVIEW ? `# Preview deploy: not for search engines.\nUser-agent: *\nDisallow: /\n` : `# Search engines and AI answer engines are welcome to read this site.\nUser-agent: *\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-SearchBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
 );
-const p = site.pricing;
 const llms = `# ${site.name}
 
-> ${site.name} builds and operates public electric vehicle (EV) charging stations in the United States, with DC fast chargers (CCS1 and NACS connectors) and Level 2 chargers (J1772). It also installs and runs charging for businesses, property owners and fleets.
+> ${site.name} (${site.legalName}) is an electric vehicle (EV) charging outlet in Arlington, Texas. It works in partnership with charging station owners, currently ${partner.name}. Drivers charge and pay through ${partner.name}.
 
 ## Key facts
-- Service area: United States
-- Charging types: DC fast charging (up to ${vars['stations.maxKw']} kW) and Level 2 charging
-- Connectors: CCS1 (Combined Charging System), NACS (North American Charging Standard, SAE J3400), J1772
-- Pay as you go: ${money(p.dcFastPerKwh)}/kWh DC fast, ${money(p.level2PerKwh)}/kWh Level 2; pay with a credit or debit card at the charger, Apple Pay or Google Pay
-- Busari Plus membership: ${money(p.plusMonthly)}/month, ${money(p.plusDcFastPerKwh)}/kWh DC fast, ${money(p.plusLevel2PerKwh)}/kWh Level 2
-- Idle fee: ${money(p.idlePerMinute)}/minute, starting ${p.idleGraceMinutes} minutes after a session ends
-- Contact: ${site.email}${site.phone ? ', ' + site.phone : ''}
+- Station: ${vars['site.address']}
+- Hours: open 24 hours, 7 days a week
+- Cars: works with all EV makes and models (CCS1 and NACS connectors)
+- Pricing: set by ${partner.name}; shown in the ${partner.name} app and on the charger screen (${partner.pricingUrl})
+- Payment: the ${partner.name} app (Pass or Pass+ plan), or a credit/debit card at the charger
+- Home charging: ${site.name} arranges Level 1 and Level 2 home charger installation on request
+- Fleets and businesses can arrange to charge company vehicles at the station
+- Charger support, 24/7: ${site.phone} (${partner.name})
+- Email: ${site.email}
 
 ## Pages
-- [Find a charger](${SITE_URL}/locations/): map of every station, with live availability and distance from you
-- [Pricing](${SITE_URL}/pricing/): per-kWh prices, membership, idle fees
-- [For business](${SITE_URL}/business/): host chargers, workplace and fleet charging
-- [FAQ](${SITE_URL}/faq/): connectors, charging times, payment, accessibility
+- [Find the station](${SITE_URL}/locations/): map, address and directions
+- [Pricing and payment](${SITE_URL}/pricing/)
+- [Home charging](${SITE_URL}/home-charging/): request a Level 1 or Level 2 installation
+- [For business](${SITE_URL}/business/): fleet and company charging
 - [About](${SITE_URL}/about/)
 - [Contact](${SITE_URL}/contact/)
 `;
 fs.writeFileSync(path.join(OUT, 'llms.txt'), llms);
 
 /* ---------- favicon, manifest, host config ---------- */
-const mark = (size) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}"><rect width="64" height="64" rx="14" fill="#0A4FA3"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#fff" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#FFC531"/></svg>`;
+const mark = (size) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}"><rect width="64" height="64" rx="14" fill="#111813"/><rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="#39FF14" stroke-width="3"/><path d="M36 10 18 36h12l-4 18 20-28H34z" fill="#39FF14"/></svg>`;
 fs.writeFileSync(path.join(OUT, 'favicon.svg'), mark(64));
 fs.writeFileSync(
   path.join(OUT, 'site.webmanifest'),
-  JSON.stringify({ name: site.name, short_name: 'Busari', start_url: BASE + '/', display: 'standalone', background_color: '#F5F7FA', theme_color: '#0A4FA3', icons: [{ src: BASE + '/favicon.svg', sizes: 'any', type: 'image/svg+xml' }, { src: BASE + '/assets/img/logo-512.png', sizes: '512x512', type: 'image/png' }] }, null, 2)
+  JSON.stringify({ name: site.name, short_name: 'BusterElectric', start_url: BASE + '/', display: 'standalone', background_color: '#F4F6F4', theme_color: '#111813', icons: [{ src: BASE + '/favicon.svg', sizes: 'any', type: 'image/svg+xml' }, { src: BASE + '/assets/img/logo-512.png', sizes: '512x512', type: 'image/png' }] }, null, 2)
 );
 // Netlify / Cloudflare Pages headers: long cache for assets, security headers everywhere.
 fs.writeFileSync(
   path.join(OUT, '_headers'),
   `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: geolocation=(self), camera=(), microphone=()\n  X-Frame-Options: SAMEORIGIN\n\n/assets/img/*\n  Cache-Control: public, max-age=31536000, immutable\n`
 );
-console.log(`\nBuilt ${sitemapUrls.length} indexable pages into public/. ${realStations.length} real stations, ${allStations.length - realStations.length} sample stations.`);
+console.log(`\nBuilt ${sitemapUrls.length} indexable pages into public/. ${realStations.length} stations.`);

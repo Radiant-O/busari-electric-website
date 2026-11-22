@@ -1,0 +1,65 @@
+<!---
+{
+  "title": "Home EV Charger Installation, Level 1 and Level 2 | BusterElectric",
+  "description": "Want to charge your EV at home? BusterElectric arranges Level 1 and Level 2 home charger installation. Send a request and we'll get back to you.",
+  "path": "/home-charging/",
+  "nav": "homeCharging",
+  "breadcrumb": "Home charging",
+  "priority": 0.7,
+  "ogImage": "/assets/img/home-charging-1600.webp"
+}
+--->
+<section class="page-intro">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">Home charging</span></nav>
+    <h1>Charge at home</h1>
+    <p class="lede">We arrange Level 1 and Level 2 charger installation for your house. Tell us about your home and we'll get back to you.</p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="levels-title">
+  <div class="wrap">
+    <h2 id="levels-title" class="sr-only">Charger types</h2>
+    <div class="speeds">
+      <article class="speed">
+        <h3>Level 1</h3>
+        <p class="speed-caption">Uses a regular 120-volt wall outlet. Adds about 3 to 5 miles of range per hour. Good if you drive short distances.</p>
+      </article>
+      <article class="speed speed-dc">
+        <h3>Level 2</h3>
+        <p class="speed-caption">Uses a 240-volt circuit, like a dryer. Adds about 20 to 40 miles of range per hour, so most cars are full by morning.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white" id="request" aria-labelledby="form-title">
+  <div class="wrap contact-grid">
+    <div>
+      <h2 id="form-title">Request home charging</h2>
+      <p class="lede">Not sure which level you need? Choose "Not sure" and we'll help you decide.</p>
+    </div>
+    <div class="form-card">
+      <form class="form" data-form data-subject="Home charger installation request" data-endpoint="{{site.formEndpoint}}" data-email="{{site.email}}" data-success="Request sent. We'll get back to you soon." novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="h-name">Full name</label><input class="input" id="h-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="h-phone">Phone</label><input class="input" id="h-phone" name="phone" type="tel" autocomplete="tel" pattern="[0-9+()\-.\s]{7,}" required data-error="Enter a phone number."></div>
+          <div class="field"><label for="h-email">Email</label><input class="input" id="h-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="h-zip">Home ZIP code</label><input class="input" id="h-zip" name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" maxlength="5" required data-error="Enter a 5-digit ZIP code."></div>
+          <div class="field full"><label for="h-level">Charger type</label>
+            <select class="select" id="h-level" name="charger_type" required>
+              <option value="">Choose one</option>
+              <option>Level 1</option>
+              <option>Level 2</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+          <div class="field full"><label for="h-msg">Your car and home (optional)</label><textarea class="textarea" id="h-msg" name="message" placeholder="Car make and model, house or apartment, where you park"></textarea></div>
+        </div>
+        <div class="hp-field" aria-hidden="true"><label for="h-web">Leave this empty</label><input class="hp-input" id="h-web" name="website_url" tabindex="-1" autocomplete="off"></div>
+        <button class="btn btn-primary" type="submit">Send request</button>
+        <p class="form-status" data-form-status role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+  </div>
+</section>

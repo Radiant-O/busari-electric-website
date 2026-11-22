@@ -1,7 +1,7 @@
 <!---
 {
-  "title": "Contact Busari Electric | EV Charging Support & Sales",
-  "description": "Contact Busari Electric for help at a charging station, billing questions, Busari Plus membership, or to talk to our team about chargers for your business.",
+  "title": "Contact BusterElectric | EV Charging in Arlington, TX",
+  "description": "Contact BusterElectric about home charger installation, fleet charging, or our Arlington station. For help at a charger, call 24/7 support at 1-833-632-2778.",
   "path": "/contact/",
   "nav": "contact",
   "breadcrumb": "Contact",
@@ -13,7 +13,7 @@
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">Contact</span></nav>
     <h1>Contact us</h1>
-    <p class="lede">Need help at a charger, have a billing question, or want chargers for your business? Send us a message and we will reply within one business day.</p>
+    <p class="lede">Questions about home charging, fleet charging or our station? Send us a message.</p>
   </div>
 </section>
 
@@ -21,15 +21,13 @@
   <div class="wrap contact-grid">
     <div>
       <ul class="contact-ways">
-        <li class="contact-way"><span class="feature-icon">{{icon:zap}}</span><div><h3>At a charger right now?</h3><p>Try another charger at the station, then contact us with the station name and the charger number printed on the unit.</p></div></li>
+        <li class="contact-way"><span class="feature-icon">{{icon:zap}}</span><div><h3>Problem at a charger?</h3><p>Call 24/7 charger support from {{partner.name}}: <a href="tel:{{site.phoneHref}}">{{site.phone}}</a></p></div></li>
+        <li class="contact-way"><span class="feature-icon">{{icon:map-pin}}</span><div><h3>Station</h3><p>{{site.address}}<br><a href="{{site.directions}}" target="_blank" rel="noopener">Get directions</a></p></div></li>
         <li class="contact-way"><span class="feature-icon">{{icon:mail}}</span><div><h3>Email</h3><p><a href="mailto:{{site.email}}">{{site.email}}</a></p></div></li>
-        {{#site.phone}}<li class="contact-way"><span class="feature-icon">{{icon:phone}}</span><div><h3>Phone</h3><p><a href="tel:{{site.phoneHref}}">{{site.phone}}</a></p></div></li>{{/site.phone}}
-        {{#site.address}}<li class="contact-way"><span class="feature-icon">{{icon:map-pin}}</span><div><h3>Office</h3><p>{{site.address}}</p></div></li>{{/site.address}}
-        <li class="contact-way"><span class="feature-icon">{{icon:building-2}}</span><div><h3>Business charging</h3><p>Planning chargers for a property or fleet? <a href="/business/#assessment">Request a site assessment</a>.</p></div></li>
       </ul>
     </div>
     <div class="form-card">
-      <form class="form" data-form data-subject="Website message" data-endpoint="{{site.formEndpoint}}" data-email="{{site.email}}" data-success="Message sent. We will reply within one business day." novalidate>
+      <form class="form" data-form data-subject="Website message" data-endpoint="{{site.formEndpoint}}" data-email="{{site.email}}" data-success="Message sent. We'll reply within one business day." novalidate>
         <div class="form-grid">
           <div class="field"><label for="c-name">Full name</label><input class="input" id="c-name" name="name" autocomplete="name" required></div>
           <div class="field"><label for="c-email">Email</label><input class="input" id="c-email" name="email" type="email" autocomplete="email" required></div>
@@ -37,14 +35,12 @@
           <div class="field"><label for="c-topic">Topic</label>
             <select class="select" id="c-topic" name="topic" required data-topic>
               <option value="">Choose one</option>
-              <option value="Problem at a station">Problem at a station</option>
-              <option value="Billing or receipt">Billing or receipt</option>
-              <option value="Busari Plus membership" data-key="plus">Busari Plus membership</option>
-              <option value="Chargers for my business">Chargers for my business</option>
+              <option value="Home charger installation" data-key="home">Home charger installation</option>
+              <option value="Fleet or business charging" data-key="fleet">Fleet or business charging</option>
+              <option value="Our station">Our station</option>
               <option value="Something else">Something else</option>
             </select>
           </div>
-          <div class="field full"><label for="c-station">Station name and charger number (optional)</label><input class="input" id="c-station" name="station"></div>
           <div class="field full"><label for="c-msg">Message</label><textarea class="textarea" id="c-msg" name="message" required></textarea></div>
         </div>
         <div class="hp-field" aria-hidden="true"><label for="c-web">Leave this empty</label><input class="hp-input" id="c-web" name="website_url" tabindex="-1" autocomplete="off"></div>
