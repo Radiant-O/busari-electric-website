@@ -97,9 +97,11 @@ const organization = {
   url: SITE_URL + '/',
   logo: SITE_URL + '/assets/img/logo-512.png',
   description: `${site.name} is an EV charging outlet in Arlington, Texas, operating in partnership with station owners, currently ${partner.name}. It also arranges Level 1 and Level 2 home charger installation.`,
-  areaServed: { '@type': 'State', name: 'Texas' },
+  slogan: 'Charging an electric car should be as easy as filling up.',
+  knowsAbout: ['EV charging', 'DC fast charging', 'Tesla NACS charging', 'CCS1 charging', 'Level 2 home charger installation'],
+  areaServed: ['Arlington', 'Grand Prairie', 'Mansfield', 'Pantego', 'Dalworthington Gardens', 'Kennedale', 'Fort Worth', 'Dallas'].map((name) => ({ '@type': 'City', name, containedInPlace: { '@type': 'State', name: 'Texas' } })),
   email: site.email,
-  ...(site.phone ? { telephone: site.phone, contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'customer support', hoursAvailable: 'Mo-Su 00:00-23:59', areaServed: 'US', availableLanguage: ['English'] }] } : {}),
+  ...(site.phone ? { telephone: site.phone, contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'customer support', areaServed: 'US', availableLanguage: ['English'] }] } : {}),
   ...(hasAddress ? { address: { '@type': 'PostalAddress', streetAddress: addr.street, addressLocality: addr.city, addressRegion: addr.region, postalCode: addr.postalCode, addressCountry: addr.country || 'US' } } : {}),
   ...(site.social && site.social.length ? { sameAs: site.social } : {}),
 };
@@ -130,6 +132,12 @@ function stationSchema(s) {
     address: { '@type': 'PostalAddress', streetAddress: s.street, addressLocality: s.city, addressRegion: s.state, postalCode: s.zip, addressCountry: 'US' },
     geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
     openingHours: /24/.test(s.hours) ? 'Mo-Su 00:00-23:59' : undefined,
+    openingHoursSpecification: /24/.test(s.hours) ? [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '00:00', closes: '23:59' }] : undefined,
+    telephone: site.phone || undefined,
+    image: SITE_URL + '/assets/img/og-image.jpg',
+    paymentAccepted: 'Credit card, debit card, ' + (s.network || partner.name) + ' app',
+    publicAccess: true,
+    hasMap: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.street + ', ' + s.city + ', ' + s.state + ' ' + s.zip),
     description: `EV charging station${s.network ? ' on the ' + s.network + ' network' : ''}: ${s.connectors.map((c) => `${c.type} ${c.level === 'dc' ? 'DC fast' : 'Level 2'}`).join(', ')}.`,
     amenityFeature: [
       ...(dc.length ? [{ '@type': 'LocationFeatureSpecification', name: 'DC fast charging', value: true }] : []),
@@ -249,12 +257,14 @@ const llms = `# ${site.name}
 ## Key facts
 - Station: ${vars['site.address']}
 - Hours: open 24 hours, 7 days a week
-- Cars: works with all EV makes and models (CCS1 and NACS connectors)
+- Cars: any EV with a CCS1 or NACS (Tesla) port, including Tesla, Ford, Chevrolet, Cadillac, GMC, Hyundai, Kia, Genesis, BMW, Mercedes-Benz, Audi, Volkswagen, Porsche, Nissan (Ariya), Toyota, Lexus, Honda, Acura, Volvo, Polestar, Rivian, Lucid, MINI, Subaru, Mazda, Jeep, Fiat, Chrysler and Ram
 - Pricing: standard ${partner.name} rates, no extra fees; shown in the ${partner.name} app and on the charger screen
 - Payment: the ${partner.name} app (iPhone: ${partner.appIos}, Android: ${partner.appAndroid}), or a credit/debit card at the charger
 - Home charging: ${site.name} arranges Level 1 and Level 2 home charger installation on request
 - Fleets and businesses can arrange to charge company vehicles at the station
 - Charger support: ${site.phone} (${partner.name})
+- Vision: a world where charging an electric car is as easy as filling up a tank
+- Mission: make charging easy for every EV driver, starting in Arlington, Texas
 - Email: ${site.email}
 
 ## Pages
