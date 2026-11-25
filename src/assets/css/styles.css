@@ -650,3 +650,9 @@ tbody th { font-weight: 600; }
 .post-cta :focus-visible { outline-color: var(--volt); }
 .section-head-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 32px; }
 .section-head-row h2 { margin: 0; }
+
+/* Brand tiles in each brand's own color, on a light tint of it */
+.brand-tile { color: var(--c, var(--ink)); background: color-mix(in srgb, var(--c, #000) 7%, #fff); border-color: color-mix(in srgb, var(--c, #000) 22%, #fff); border-width: 1.5px; }
+.brand-tile-text b { color: var(--c, var(--ink)); }
+.brand-tile svg { width: 48px; height: 48px; }
+@media (min-width: 1024px) { .brand-tile svg { width: 56px; height: 56px; } }
