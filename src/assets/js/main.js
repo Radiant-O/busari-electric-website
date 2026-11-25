@@ -99,17 +99,3 @@
     });
   });
 })();
-
-/* Car brand strip: pause and resume the scrolling logos. */
-(function () {
-  document.querySelectorAll('[data-marquee-toggle]').forEach(function (btn) {
-    var strip = btn.closest('section').querySelector('[data-marquee]');
-    var label = btn.querySelector('span');
-    btn.addEventListener('click', function () {
-      var paused = btn.getAttribute('aria-pressed') !== 'true';
-      btn.setAttribute('aria-pressed', String(paused));
-      strip.classList.toggle('is-paused', paused);
-      label.textContent = paused ? 'Play' : 'Pause';
-    });
-  });
-})();
