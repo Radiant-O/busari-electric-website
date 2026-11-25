@@ -13,7 +13,7 @@
   if (toggle) {
     toggle.addEventListener('click', function () { setNav(toggle.getAttribute('aria-expanded') !== 'true'); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && header.classList.contains('nav-open')) { setNav(false); toggle.focus(); } });
-    window.matchMedia('(min-width: 1024px)').addEventListener('change', function (m) { if (m.matches) setNav(false); });
+    window.matchMedia('(min-width: 1200px)').addEventListener('change', function (m) { if (m.matches) setNav(false); });
   }
 
   /* ---------- forms ----------

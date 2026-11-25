@@ -155,18 +155,57 @@ function parsePage(file) {
 }
 
 const pageFiles = fs.readdirSync(path.join(SRC, 'pages')).filter((f) => f.endsWith('.html'));
+
+/* ---------- blog ---------- */
+// Each post is src/posts/<slug>.html with a front matter block: title, headline, description, date, image, imageAlt, minutes.
+const postDir = path.join(SRC, 'posts');
+const posts = (fs.existsSync(postDir) ? fs.readdirSync(postDir).filter((f) => f.endsWith('.html')) : [])
+  .map((f) => ({ slug: f.replace(/\.html$/, ''), ...parsePage(path.join(postDir, f)) }))
+  .sort((a, b) => (b.meta.pin ? 1 : 0) - (a.meta.pin ? 1 : 0) || b.meta.date.localeCompare(a.meta.date) || a.slug.localeCompare(b.slug));
+const fmtDate = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const postImg = (m, sizes) => `<img src="/assets/img/${m.image}-800.webp" srcset="/assets/img/${m.image}-800.webp 800w, /assets/img/${m.image}-1600.webp 1600w" sizes="${sizes}" width="800" height="533" loading="lazy" alt="${esc(m.imageAlt)}">`;
+const postCard = (pp) => `<li class="post-card"><a href="/blog/${pp.slug}/">${postImg(pp.meta, '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw')}<div class="post-card-body"><h2>${esc(pp.meta.headline || pp.meta.title)}</h2><p>${esc(pp.meta.description)}</p><span class="post-card-meta"><time datetime="${pp.meta.date}">${fmtDate(pp.meta.date)}</time>, ${pp.meta.minutes} min read</span></div></a></li>`;
+vars['blog.list'] = posts.map(postCard).join('\n');
+vars['blog.latest'] = posts.slice(0, 3).map(postCard).join('\n');
+
+const pageList = [
+  ...pageFiles.map((f) => ({ f, ...parsePage(path.join(SRC, 'pages', f)) })),
+  ...posts.map((pp) => {
+    const m = pp.meta;
+    const related = posts.filter((o) => o.slug !== pp.slug).slice(0, 3).map(postCard).join('\n');
+    const body = `<article class="post">
+  <header class="page-intro post-intro">
+    <div class="wrap post-wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog/">Blog</a> / <span aria-current="page">${esc(m.headline || m.title)}</span></nav>
+      <h1>${esc(m.headline || m.title)}</h1>
+      <p class="post-meta">By the {{site.name}} team. <time datetime="${m.date}">${fmtDate(m.date)}</time>. ${m.minutes} min read.</p>
+    </div>
+  </header>
+  <div class="wrap post-wrap post-body">
+    <figure class="post-hero">${postImg(m, '(min-width: 860px) 780px, 100vw').replace(' loading="lazy"', ' fetchpriority="high"')}</figure>
+${pp.body.trim()}
+    <aside class="post-cta">
+      <h2>Charge with us in Arlington</h2>
+      <p>{{site.street}}, {{site.cityLine}}. Open 24 hours, with CCS1 and NACS (Tesla) plugs.</p>
+      <div class="cta-actions"><a class="btn btn-primary" href="{{site.directions}}" target="_blank" rel="noopener">{{icon:navigation}}Get directions</a><a class="btn btn-outline" href="/locations/">See it on the map</a></div>
+    </aside>
+  </div>
+</article>
+${related ? `<section class="section section-white" aria-labelledby="more-title"><div class="wrap"><h2 id="more-title">More from the blog</h2><ul class="post-grid">${related}</ul></div></section>` : ''}`;
+    return { f: 'post:' + pp.slug, meta: { ...m, path: `/blog/${pp.slug}/`, nav: 'blog', crumbParent: { name: 'Blog', path: '/blog/' }, breadcrumb: m.headline || m.title, post: true, priority: 0.7 }, body };
+  }),
+];
 const sitemapUrls = [];
 
 rmrf(OUT);
 mkdirp(OUT);
 
-for (const f of pageFiles) {
-  const { meta, body } = parsePage(path.join(SRC, 'pages', f));
+for (const { f, meta, body } of pageList) {
   meta.title = render(meta.title, {});
   meta.description = render(meta.description, {});
   const pagePath = meta.path; // e.g. "/" or "/locations/"
   const canonical = SITE_URL + pagePath;
-  const ogImage = SITE_URL + (meta.ogImage || '/assets/img/og-image.jpg');
+  const ogImage = SITE_URL + (meta.ogImage || (meta.post ? '/assets/img/' + meta.image + '-1600.webp' : '/assets/img/og-image.jpg'));
   const ctx = {
     'page.title': esc(meta.title),
     'page.description': esc(meta.description),
@@ -179,7 +218,7 @@ for (const f of pageFiles) {
     'page.styles': (meta.styles || []).map((s) => `<link rel="stylesheet" href="${s}"${s.startsWith('http') ? ' crossorigin="anonymous"' : ''}>`).join('\n'),
     'page.bodyClass': meta.bodyClass || '',
   };
-  for (const n of ['home', 'locations', 'pricing', 'business', 'homeCharging', 'about', 'contact']) ctx['nav.' + n] = meta.nav === n ? ' aria-current="page"' : '';
+  for (const n of ['home', 'locations', 'pricing', 'business', 'homeCharging', 'about', 'blog', 'contact']) ctx['nav.' + n] = meta.nav === n ? ' aria-current="page"' : '';
 
   // structured data
   const schemas = [organization, website];
@@ -189,7 +228,8 @@ for (const f of pageFiles) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL + '/' },
-        { '@type': 'ListItem', position: 2, name: meta.breadcrumb || meta.title, item: canonical },
+        ...(meta.crumbParent ? [{ '@type': 'ListItem', position: 2, name: meta.crumbParent.name, item: SITE_URL + meta.crumbParent.path }] : []),
+        { '@type': 'ListItem', position: meta.crumbParent ? 3 : 2, name: meta.breadcrumb || meta.title, item: canonical },
       ],
     });
   }
@@ -203,9 +243,26 @@ for (const f of pageFiles) {
     isPartOf: { '@id': SITE_URL + '/#website' },
     about: { '@id': orgId },
     inLanguage: 'en-US',
-    dateModified: today,
+    dateModified: meta.updated || meta.date || today,
     primaryImageOfPage: ogImage,
   });
+  if (meta.post) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': canonical + '#article',
+      mainEntityOfPage: { '@id': canonical + '#webpage' },
+      headline: meta.headline || meta.title,
+      description: meta.description,
+      image: [SITE_URL + '/assets/img/' + meta.image + '-1600.webp'],
+      datePublished: meta.date,
+      dateModified: meta.updated || meta.date,
+      author: { '@id': orgId },
+      publisher: { '@id': orgId },
+      inLanguage: 'en-US',
+      ...(meta.keywords ? { keywords: meta.keywords } : {}),
+    });
+  }
   if (meta.faqFromPage) {
     // Build FAQPage schema from the page's own <details class="faq"> markup so the visible text and schema always match.
     const rendered = render(body, ctx);
@@ -229,7 +286,7 @@ for (const f of pageFiles) {
   const dest = pagePath === '/' ? path.join(OUT, 'index.html') : f === '404.html' ? path.join(OUT, '404.html') : path.join(OUT, pagePath, 'index.html');
   mkdirp(path.dirname(dest));
   fs.writeFileSync(dest, html);
-  if (!meta.noindex) sitemapUrls.push({ loc: canonical, priority: meta.priority || 0.7 });
+  if (!meta.noindex) sitemapUrls.push({ loc: canonical, priority: meta.priority || 0.7, lastmod: meta.updated || meta.date || today });
   console.log('page', pagePath, '->', path.relative(ROOT, dest));
 }
 
@@ -243,8 +300,15 @@ fs.writeFileSync(path.join(OUT, 'assets', 'data', 'site.json'), JSON.stringify({
 fs.writeFileSync(
   path.join(OUT, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    sitemapUrls.sort((a, b) => b.priority - a.priority).map((u) => `  <url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.priority}</priority></url>`).join('\n') +
+    sitemapUrls.sort((a, b) => b.priority - a.priority).map((u) => `  <url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`).join('\n') +
     `\n</urlset>\n`
+);
+const rssEsc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+fs.writeFileSync(
+  path.join(OUT, 'blog', 'feed.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>${rssEsc(site.name)} Blog</title><link>${SITE_URL}/blog/</link><description>EV charging guides from ${rssEsc(site.name)} in Arlington, Texas.</description><language>en-us</language>\n` +
+    posts.map((pp) => `<item><title>${rssEsc(pp.meta.headline || pp.meta.title)}</title><link>${SITE_URL}/blog/${pp.slug}/</link><guid>${SITE_URL}/blog/${pp.slug}/</guid><pubDate>${new Date(pp.meta.date + 'T12:00:00Z').toUTCString()}</pubDate><description>${rssEsc(pp.meta.description)}</description></item>`).join('\n') +
+    `\n</channel></rss>\n`
 );
 fs.writeFileSync(
   path.join(OUT, 'robots.txt'),
@@ -273,6 +337,8 @@ const llms = `# ${site.name}
 - [Home charging](${SITE_URL}/home-charging/): request a Level 1 or Level 2 installation
 - [For business](${SITE_URL}/business/): fleet and company charging
 - [About](${SITE_URL}/about/)
+- [Blog](${SITE_URL}/blog/): EV charging guides
+${posts.map((pp) => `- [${pp.meta.headline || pp.meta.title}](${SITE_URL}/blog/${pp.slug}/): ${pp.meta.description}`).join('\n')}
 - [Contact](${SITE_URL}/contact/)
 `;
 fs.writeFileSync(path.join(OUT, 'llms.txt'), llms);
