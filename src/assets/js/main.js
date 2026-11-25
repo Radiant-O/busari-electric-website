@@ -79,7 +79,7 @@
 
       var data = {};
       new FormData(form).forEach(function (v, k) { if (k !== 'website_url') data[k] = v; });
-      var subject = form.dataset.subject || 'Website enquiry';
+      var subject = form.dataset.subject || 'Website inquiry';
       var endpoint = form.dataset.endpoint;
 
       if (endpoint) {
