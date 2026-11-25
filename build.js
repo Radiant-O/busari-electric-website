@@ -97,7 +97,7 @@ const organization = {
   url: SITE_URL + '/',
   logo: SITE_URL + '/assets/img/logo-512.png',
   description: `${site.name} is an EV charging outlet in Arlington, Texas, operating in partnership with station owners, currently ${partner.name}. It also arranges Level 1 and Level 2 home charger installation.`,
-  slogan: 'Charging an electric car should be as easy as filling up.',
+  slogan: 'A charger close by and ready, wherever you drive.',
   knowsAbout: ['EV charging', 'DC fast charging', 'Tesla NACS charging', 'CCS1 charging', 'Level 2 home charger installation'],
   areaServed: ['Arlington', 'Grand Prairie', 'Mansfield', 'Pantego', 'Dalworthington Gardens', 'Kennedale', 'Fort Worth', 'Dallas'].map((name) => ({ '@type': 'City', name, containedInPlace: { '@type': 'State', name: 'Texas' } })),
   email: site.email,
@@ -263,8 +263,8 @@ const llms = `# ${site.name}
 - Home charging: ${site.name} arranges Level 1 and Level 2 home charger installation on request
 - Fleets and businesses can arrange to charge company vehicles at the station
 - Charger support: ${site.phone} (${partner.name})
-- Vision: a world where charging an electric car is as easy as filling up a tank
-- Mission: make charging easy for every EV driver, starting in Arlington, Texas
+- Vision: a future where no driver has to worry about where to charge
+- Mission: make charging easy for every electric vehicle, starting in Arlington, Texas
 - Email: ${site.email}
 
 ## Pages
