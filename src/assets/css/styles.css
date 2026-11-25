@@ -565,3 +565,5 @@ tbody th { font-weight: 600; }
 .footer-partner { border-top: 1px solid rgba(255,255,255,.12); padding-block: 20px; font-size: var(--step--1); }
 .footer-partner p { margin: 0; max-width: 80ch; }
 .footer-partner a { text-decoration: underline; }
+.plan .cta-actions { margin-top: auto; }
+.plan .cta-actions .btn { margin-top: 0; }

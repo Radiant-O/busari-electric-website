@@ -4,11 +4,12 @@
   "legalName": "Buster Technologies LLC",
   "url": "https://www.busterelectric.com",
   "_url_todo": "TODO: confirm the real domain. It drives canonical URLs, the sitemap, and structured data.",
-  "tagline": "Fast EV charging in Arlington, Texas, in partnership with Electrify America.",
+  "tagline": "Fast EV charging in Arlington, Texas, in partnership with E-Fill Electric.",
   "email": "hello@busterelectric.com",
   "_email_todo": "TODO: confirm the real email address once the domain is set up.",
-  "phone": "1-833-632-2778",
-  "phoneLabel": "24/7 charger support (Electrify America)",
+  "phone": "+1 (346) 771-5652",
+  "phoneLabel": "Charger support (E-Fill Electric)",
+  "_phone_todo": "TODO: replace with BusterElectric's own number when ready.",
   "address": {
     "street": "2404 South Collins Street",
     "city": "Arlington",
@@ -17,10 +18,10 @@
     "country": "US"
   },
   "partner": {
-    "name": "Electrify America",
-    "url": "https://www.electrifyamerica.com/",
-    "pricingUrl": "https://www.electrifyamerica.com/pricing/",
-    "appUrl": "https://www.electrifyamerica.com/app/"
+    "name": "E-Fill Electric",
+    "url": "https://www.efillelectric.com/usa",
+    "appIos": "https://apps.apple.com/us/app/e-fill-electric/id1565499471",
+    "appAndroid": "https://play.google.com/store/apps/details?id=com.efill"
   },
   "social": [],
   "formEndpoint": "",

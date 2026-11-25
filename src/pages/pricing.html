@@ -1,7 +1,7 @@
 <!---
 {
   "title": "EV Charging Pricing and Payment | BusterElectric Arlington",
-  "description": "Charging prices at BusterElectric in Arlington, TX are set by Electrify America. See the price in the Electrify America app or on the charger, and pay with the app or a card.",
+  "description": "Charging prices at BusterElectric in Arlington, TX follow E-Fill Electric rates with no extra fees. See the price in the E-Fill Electric app or on the charger, and pay with the app or a card.",
   "path": "/pricing/",
   "nav": "pricing",
   "breadcrumb": "Pricing",
@@ -12,7 +12,7 @@
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">Pricing</span></nav>
     <h1>Pricing and payment</h1>
-    <p class="lede">Charging at our station uses {{partner.name}} pricing. We don't add any fees of our own.</p>
+    <p class="lede">Charging at our station uses standard {{partner.name}} rates. We don't add any fees of our own.</p>
   </div>
 </section>
 
@@ -20,31 +20,34 @@
   <div class="wrap">
     <div class="section-head">
       <h2 id="price-title">Where to see the price</h2>
-      <p>The price depends on your plan and how much energy your car takes. You can check it before you start: open the {{partner.name}} app and select our station on the map, or read it on the charger screen.</p>
+      <p>The price depends on how much energy your car takes. You can check it before you start: open the {{partner.name}} app and select our station on the map, or read it on the charger screen.</p>
     </div>
 
     <div class="plans">
       <article class="plan">
         <span class="plan-tag">No sign-up</span>
         <h3>Pay with a card</h3>
-        <p class="plan-desc">Tap or insert a credit or debit card on the charger. Apple Pay and Google Wallet also work.</p>
+        <p class="plan-desc">Tap or insert a credit or debit card on the charger.</p>
         <ul class="checks">
           <li>{{icon:check}}<span>No app or account needed</span></li>
           <li>{{icon:check}}<span>Price shown on the charger screen</span></li>
         </ul>
       </article>
       <article class="plan plan-plus">
-        <span class="plan-tag">Members</span>
+        <span class="plan-tag">App</span>
         <h3>Pay with the {{partner.name}} app</h3>
         <p class="plan-desc">Add a card in the app once, then start and pay for charging from your phone.</p>
         <ul class="checks">
-          <li>{{icon:check}}<span>Pass: free plan for app members</span></li>
-          <li>{{icon:check}}<span>Pass+: monthly plan with lower charging prices</span></li>
+          <li>{{icon:check}}<span>See the price before you start</span></li>
+          <li>{{icon:check}}<span>Track your charge from your phone</span></li>
         </ul>
-        <a class="btn btn-primary" href="{{partner.appUrl}}" target="_blank" rel="noopener">Get the app</a>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="{{partner.appIos}}" target="_blank" rel="noopener">App Store</a>
+          <a class="btn btn-outline" href="{{partner.appAndroid}}" target="_blank" rel="noopener">Google Play</a>
+        </div>
       </article>
     </div>
 
-    <p class="price-note">Idle fees may apply if your car stays plugged in after charging ends. For full and current prices, see <a href="{{partner.pricingUrl}}" target="_blank" rel="noopener">{{partner.name}} pricing</a>.</p>
+    <p class="price-note">Idle fees may apply if your car stays plugged in after charging ends. For current prices, check the {{partner.name}} app or the charger screen.</p>
   </div>
 </section>

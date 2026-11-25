@@ -2,7 +2,7 @@
   "_readme": [
     "Every BusterElectric station the map shows. Add one object per site.",
     "connectors: type is CCS1, NACS or J1772; level is dc (fast) or l2 (Level 2). kw is optional.",
-    "'available' is optional. Leave it out when live availability isn't known; the map then points drivers to the Electrify America app for live status.",
+    "'available' is optional. Leave it out when live availability isn't known; the map then points drivers to the E-Fill Electric app for live status.",
     "For live availability, set liveStatusUrl to an endpoint that returns { \"<station id>\": { \"<connector type>\": <available count> } }."
   ],
   "liveStatusUrl": "",
@@ -14,7 +14,7 @@
       "city": "Arlington", "state": "TX", "zip": "76014",
       "lat": 32.70487, "lng": -97.09745,
       "hours": "Open 24 hours",
-      "network": "Electrify America",
+      "network": "E-Fill Electric",
       "amenities": [],
       "connectors": [
         { "type": "CCS1", "level": "dc" },

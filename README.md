@@ -1,6 +1,6 @@
 # BusterElectric website
 
-Website and station map for BusterElectric (Buster Technologies LLC), an EV charging outlet in Arlington, TX, partnered with Electrify America. It's a fast static site: plain HTML, CSS and JavaScript, with no framework and no database.
+Website and station map for BusterElectric (Buster Technologies LLC), an EV charging outlet in Arlington, TX, partnered with E-Fill Electric. It's a fast static site: plain HTML, CSS and JavaScript, with no framework and no database.
 
 ## Run it locally
 
@@ -45,7 +45,7 @@ Add an object to `stations` in `src/data/stations.json`:
 
 - `type` is `CCS1`, `NACS` or `J1772`. `level` is `dc` (fast) or `l2` (Level 2).
 - Get `lat`/`lng` by right-clicking the spot in Google Maps.
-- `kw` and `available` are optional. Without `available`, the map sends drivers to the Electrify America app for live status.
+- `kw` and `available` are optional. Without `available`, the map sends drivers to the E-Fill Electric app for live status.
 
 ### Live availability
 

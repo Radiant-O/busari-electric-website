@@ -63,8 +63,8 @@ Object.assign(vars, {
   'site.directions': hasAddress ? 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(`${addr.street}, ${addr.city}, ${addr.region} ${addr.postalCode}`) : '',
   'partner.name': partner.name || '',
   'partner.url': partner.url || '',
-  'partner.pricingUrl': partner.pricingUrl || '',
-  'partner.appUrl': partner.appUrl || '',
+  'partner.appIos': partner.appIos || '',
+  'partner.appAndroid': partner.appAndroid || '',
 });
 const realStations = stationData.stations.filter((s) => !s.sample);
 const allStations = stationData.stations;
@@ -250,11 +250,11 @@ const llms = `# ${site.name}
 - Station: ${vars['site.address']}
 - Hours: open 24 hours, 7 days a week
 - Cars: works with all EV makes and models (CCS1 and NACS connectors)
-- Pricing: set by ${partner.name}; shown in the ${partner.name} app and on the charger screen (${partner.pricingUrl})
-- Payment: the ${partner.name} app (Pass or Pass+ plan), or a credit/debit card at the charger
+- Pricing: standard ${partner.name} rates, no extra fees; shown in the ${partner.name} app and on the charger screen
+- Payment: the ${partner.name} app (iPhone: ${partner.appIos}, Android: ${partner.appAndroid}), or a credit/debit card at the charger
 - Home charging: ${site.name} arranges Level 1 and Level 2 home charger installation on request
 - Fleets and businesses can arrange to charge company vehicles at the station
-- Charger support, 24/7: ${site.phone} (${partner.name})
+- Charger support: ${site.phone} (${partner.name})
 - Email: ${site.email}
 
 ## Pages
